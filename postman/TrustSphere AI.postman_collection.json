@@ -1,0 +1,178 @@
+{
+  "info": {
+    "name": "TrustSphere AI API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api/v1" },
+    { "key": "entityId", "value": "000000000000000000000000" },
+    { "key": "userId", "value": "000000000000000000000000" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": "http://localhost:4000/api/health" }
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List users",
+          "request": { "method": "GET", "url": "{{baseUrl}}/users?page=1&limit=20&sort=-createdAt" }
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Demo Analyst\",\"email\":\"analyst@example.com\",\"role\":\"analyst\"}"
+            },
+            "url": "{{baseUrl}}/users"
+          }
+        },
+        {
+          "name": "Get user",
+          "request": { "method": "GET", "url": "{{baseUrl}}/users/{{userId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Entities",
+      "item": [
+        {
+          "name": "List entities",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/entities?page=1&limit=20&sort=-createdAt"
+          }
+        },
+        {
+          "name": "Create entity",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Example Organization\",\"type\":\"organization\",\"identifier\":\"example-org\"}"
+            },
+            "url": "{{baseUrl}}/entities"
+          }
+        },
+        {
+          "name": "Get entity",
+          "request": { "method": "GET", "url": "{{baseUrl}}/entities/{{entityId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Analyses",
+      "item": [
+        {
+          "name": "Create analysis",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"entity\":\"{{entityId}}\",\"domain\":\"web\",\"inputType\":\"url\",\"input\":{\"url\":\"https://example.com\"}}"
+            },
+            "url": "{{baseUrl}}/analyses"
+          }
+        },
+        {
+          "name": "List analyses",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/analyses?domain=web&riskLevel=unknown&page=1&limit=20&sort=-createdAt"
+          }
+        },
+        {
+          "name": "Analysis history",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/analyses/history?entity={{entityId}}&page=1&limit=20"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "List notifications",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/notifications?user={{userId}}&read=false&page=1&limit=20"
+          }
+        },
+        {
+          "name": "Create notification",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":\"{{userId}}\",\"title\":\"Analysis queued\",\"message\":\"Your analysis is queued.\",\"type\":\"info\"}"
+            },
+            "url": "{{baseUrl}}/notifications"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit logs",
+      "item": [
+        {
+          "name": "List audit logs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/audit-logs?page=1&limit=20&sort=-createdAt"
+          }
+        },
+        {
+          "name": "Create audit log",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"analysis.created\",\"resourceType\":\"analysis\",\"details\":{\"source\":\"postman\"}}"
+            },
+            "url": "{{baseUrl}}/audit-logs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ingestion",
+      "item": [
+        {
+          "name": "Ingest plain text",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"source\":\"postman-demo\",\"sourceType\":\"text\",\"content\":\"Acme provides reliable business services.\"}"
+            },
+            "url": "{{baseUrl}}/ingestions"
+          }
+        },
+        {
+          "name": "Ingest JSON",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"source\":\"postman-json\",\"sourceType\":\"json\",\"content\":{\"domain\":\"financial\",\"message\":\"Demo data\"}}"
+            },
+            "url": "{{baseUrl}}/ingestions"
+          }
+        }
+      ]
+    }
+  ]
+}
